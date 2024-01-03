@@ -26,6 +26,7 @@ model Product {
   belongsToId String
   belongsTo   User     @relation(fields: [belongsToId], references: [id])
   updates      Update[]
+  @@unique([id, belongsToId])
 }
 
 enum UpdateStatus {
@@ -47,7 +48,7 @@ model Update {
 
   productId   String
   product     Product       @relation(fields: [productId], references: [id])
-  UpdatePoint UpdatePoint[]
+  updatePoints UpdatePoint[]
 }
 
 model UpdatePoint {
