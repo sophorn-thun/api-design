@@ -25,3 +25,26 @@ export const getOneProduct = async (req, res) => {
     })
     res.json({data: product})
 }
+
+
+export const createProduct = async (req, res) => {
+    const product = await prisma.product.create({
+        data: {
+            name: req.body.name,
+            belongsToId: req.user.id
+        }
+    })
+    res.json({data: product})
+}
+
+export const updateProduct = async (req, res) => {
+    const updated = await prisma.product.update({
+        where: {
+            id: req.params.id
+        },
+        data: {
+            name: req.body.name
+        }
+    })
+    res.json({data: updated})
+}
