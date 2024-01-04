@@ -1,7 +1,7 @@
 import prisma from "../db"
 
-// Get all updates 
-export const getUpdates = async (req, res) => {
+// Get all update points 
+export const getUpdatePoints = async (req, res) => {
     const products = await prisma.product.findMany({
         where: {
             belongsToId: req.user.id
@@ -15,21 +15,25 @@ export const getUpdates = async (req, res) => {
         return [...allUpdates, ...product.updates]
     }, [])
 
-    res.json({data: updates})
+    const updatePoints = updates.reduce((allUpdatePoints, update) => {
+        return [...allUpdatePoints, ...update.updatePoints]
+    }, [])
+
+    res.json({data: updatePoints})
 }
 
-// Get one update 
-export const getOneUpdate = async (req, res) => {
-    const update = await prisma.update.findUnique({
+// Get one update point
+export const getOneUpdatePoint = async (req, res) => {
+    const updatePoint = await prisma.updatePoint.findUnique({
         where: {
             id: req.params.id
         }
     })
 
-    res.json({data: update})
+    res.json({data: updatePoint})
 }
 
-// Create update
+// Create update point
 export const createUpdate = async (req, res) => {
     
     const product = await prisma.product.findUnique({
@@ -42,15 +46,15 @@ export const createUpdate = async (req, res) => {
         return res.json({ message: 'Invalid product'})
     }
 
-    const update = await prisma.update.create({
+    const updatePoint = await prisma.updatePoint.create({
         data: req.body
     })
 
-    res.json({data: update})
+    res.json({data: updatePoint})
 }
 
-// Update update
-export const updateUpdate = async (req, res) => {
+// Update update point
+export const updateUpdatePoint = async (req, res) => {
     
     const products = await prisma.product.findMany({
         where: {
@@ -65,24 +69,28 @@ export const updateUpdate = async (req, res) => {
         return [...allUpdates, ...product.updates]
     }, [])
 
-    const match = updates.find(update => update.id === req.params.id)
+    const updatePoints = updates.reduce((allUpdatePoints, update) => {
+        return [...allUpdatePoints, ...update.updatePoints]
+    }, [])
+
+    const match = updatePoints.find(updatePoint => updatePoint.id === req.params.id)
 
     if (!match) {
-        return res.json({message: 'No update matched'})
+        return res.json({message: 'No update point matched'})
     }
     
-    const updateUpdate = await prisma.update.update({
+    const updateUpdatePoint = await prisma.updatePoint.update({
         where: {
             id: req.params.id
         },
         data: req.body
     })
 
-    res.json({data: updateUpdate})
+    res.json({data: updateUpdatePoint})
 }
 
-// Delete update
-export const deleteUpdate = async (req, res) => {
+// Delete update point
+export const deleteUpdatePoint = async (req, res) => {
     const products = await prisma.product.findMany({
         where: {
             belongsToId: req.user.id,
@@ -96,13 +104,17 @@ export const deleteUpdate = async (req, res) => {
         return [...allUpdates, ...product.updates]
     }, [])
 
-    const match = updates.find(update => update.id === req.params.id)
+    const updatePoints = updates.reduce((allUpdatePoints, update) => {
+        return [...allUpdatePoints, ...update.updatePoints]
+    }, [])
+
+    const match = updatePoints.find(updatePoint => updatePoint.id === req.params.id)
 
     if (!match) {
-        return res.json({message: 'No update matched'})
+        return res.json({message: 'No update point matched'})
     }
-
-    const deleted = await prisma.update.delete({
+    
+    const deleted = await prisma.updatePoint.delete({
         where: {
             id: req.params.id
         }
