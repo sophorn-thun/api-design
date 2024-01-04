@@ -34,7 +34,7 @@ export const getOneUpdatePoint = async (req, res) => {
 }
 
 // Create update point
-export const createUpdate = async (req, res) => {
+export const createUpdatePoint = async (req, res) => {
     
     const product = await prisma.product.findUnique({
         where: {
