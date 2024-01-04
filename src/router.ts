@@ -16,7 +16,7 @@ router.delete('/product/:id', deleteProduct)
 
 // Update
 router.get('/update', getUpdates)
-router.get('/update:id', getOneUpdate)
+router.get('/update/:id', getOneUpdate)
 router.post('/update', 
     body('title').exists().isString(),
     body('body').exists().isString(),

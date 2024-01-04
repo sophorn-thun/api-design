@@ -39,11 +39,15 @@ export const createUpdate = async (req, res) => {
     })
 
     if (!product) {
-        return res.json({ message: 'Invalid product'})
+        return res.json({message: 'Invalid product'})
     }
 
     const update = await prisma.update.create({
-        data: req.body
+        data: {
+            title: req.body.title,
+            body: req.body.body,
+            product: {connect: {id: product.id}}
+        }
     })
 
     res.json({data: update})
